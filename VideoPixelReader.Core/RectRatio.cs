@@ -12,7 +12,7 @@ namespace VideoPixelReader.Core
 
         public RectRatio(double _x, double _y, double _w, double _h)
         {
-            double clip(double x) => Math.Max(0.0, Math.Min(x, 1.0));
+            double clip(double v) => Math.Max(0.0, Math.Min(v, 1.0));
 
             var stx = clip(_x);
             var sty = clip(_y);

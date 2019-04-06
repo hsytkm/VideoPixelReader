@@ -12,13 +12,11 @@ namespace VideoPixelReaderFw
     {
         static void Main(string[] args)
         {
-
 #if DEBUG
             if ((args?.Length ?? 0) == 0)
             {
                 args = new[] {
-                    //@"C:\data\sample.mp4",
-                    @"C:\Users\t_hos\Desktop\DCIM\GH5S\P1000030.MP4",
+                    @"C:\data\sample.mp4",
                     "0.47",
                     "0.47",
                     "0.06",
@@ -30,7 +28,7 @@ namespace VideoPixelReaderFw
 
             if (args.Length < 5)
             {
-                Console.WriteLine("Argument Error.");
+                Console.WriteLine("Argument Error.  VideoPixelReader.exe [video_path] [x] [y] [width] [height]");
                 return;
             }
 
