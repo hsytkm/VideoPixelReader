@@ -18,7 +18,7 @@ namespace VideoPixelReaderFw
             {
                 args = new[] {
                     //@"C:\data\sample.mp4",
-                    @"C:\Users\hosoya.takumi\Desktop\DCIM\100_PANA\P1000030.MP4",
+                    @"C:\Users\t_hos\Desktop\DCIM\GH5S\P1000030.MP4",
                     "0.47",
                     "0.47",
                     "0.06",
@@ -44,8 +44,8 @@ namespace VideoPixelReaderFw
 
                 if (File.Exists(path))
                 {
-                    //var reader = new PixelReader(path, new RectRatio(x, y, width, height));
-                    //reader.Start();
+                    var reader = new PixelReader(path, new RectRatio(x, y, width, height));
+                    reader.Start();
                 }
 
                 Console.WriteLine(Environment.NewLine + "End!");
