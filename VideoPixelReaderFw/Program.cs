@@ -52,7 +52,9 @@ namespace VideoPixelReaderFw
             {
                 Console.WriteLine(ex.Message);
             }
-
+#if DEBUG
+            Console.ReadKey();
+#endif
         }
     }
 }

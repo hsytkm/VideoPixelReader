@@ -1,11 +1,15 @@
 ﻿using OpenCvSharp;
 using System;
+using System.Threading.Tasks;
 
 namespace VideoPixelReader.Core
 {
     static class MatExtensions
     {
-        public static Pixels ReadPixelRoi(this Mat mat, RectRatio rect)
+        public static async Task<Pixels> ReadPixelRoiAsync(this Mat mat, RectRatio rect) =>
+            await Task.Run(() => mat.ReadPixelRoi(ref rect));
+
+        public static Pixels ReadPixelRoi(this Mat mat, ref RectRatio rect)
         {
             var startX = (int)Math.Round(rect.X * mat.Width);
             var startY = (int)Math.Round(rect.Y * mat.Height);
