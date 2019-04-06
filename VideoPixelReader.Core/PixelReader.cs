@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace VideoPixelReader.Core
@@ -16,17 +17,24 @@ namespace VideoPixelReader.Core
             rectRatio = rect;
         }
 
-        public void Start()
+        public void Start(int threadCount = 1)
         {
             Console.WriteLine($"Source: {sourcePath}");
             Console.WriteLine(rectRatio.ToString() + Environment.NewLine);
 
-#if true
+#if false
             // 順次実行
             ReadFrames();
 #else
-            // 非同期WhenAll(家ノートではこちらの方が遅かった… 1.6倍くらい)
-            ReadFramesAsync();
+            if (threadCount == 1)
+            {
+                ReadFrames();
+            }
+            else
+            {
+                // ◆こっちはログが出ないことある…
+                ReadFramesAsync(threadCount);
+            }
 #endif
         }
 
@@ -51,21 +59,28 @@ namespace VideoPixelReader.Core
             Console.WriteLine($"{span} sec, {span.TotalSeconds / (i + 1)} sec/frame");
         }
 
-        private async void ReadFramesAsync()
+        private async void ReadFramesAsync(int threadCount)
         {
             var sw = new System.Diagnostics.Stopwatch();
             sw.Restart();
 
             int i = 0;
             using (var frameProvider = new FrameProvider(sourcePath))
+            using (var sem = new SemaphoreSlim(threadCount)) // 最大同時実行数
             {
                 var mats = frameProvider.GetNextFrame();
-
                 var pixels = await Task.WhenAll(mats.Select(async mat =>
                 {
-                    var p = await mat.ReadPixelRoiAsync(rectRatio);
-                    mat.Dispose();
-                    return p;
+                    await sem.WaitAsync();
+                    try
+                    {
+                        return await mat.ReadPixelRoiAsync(rectRatio);
+                    }
+                    finally
+                    {
+                        mat.Dispose();
+                        sem.Release();
+                    }
                 }));
 
                 var sb = new StringBuilder();
