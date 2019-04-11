@@ -25,6 +25,25 @@ namespace VideoPixelReader.Core
             if (height == 0) throw new ArgumentOutOfRangeException(nameof(height));
 
             ulong b = 0, g = 0, r = 0;
+#if true
+            unsafe
+            {
+                int ch = mat.Channels();
+                int stride = mat.Width * ch;
+                byte* pyst = mat.DataPointer + (startY * stride) + (startX * ch);
+                byte* pyed = pyst + (height * stride);
+
+                for (var py = pyst; py < pyed; py += stride)
+                {
+                    for (var px = py; px < py + (width * ch); px += ch)
+                    {
+                        b += px[0];
+                        g += px[1];
+                        r += px[2];
+                    }
+                }
+            }
+#else
             for (int y = startY; y < endY; y++)
             {
                 for (int x = startX; x < endX; x++)
@@ -35,6 +54,7 @@ namespace VideoPixelReader.Core
                     r += pix.Item2;
                 }
             }
+#endif
 
             double count = width * height;
             return new Pixels(b: b / count, g: g / count, r: r / count);
