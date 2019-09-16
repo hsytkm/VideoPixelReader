@@ -2,7 +2,7 @@
 
 namespace VideoPixelReader.Core
 {
-    struct Pixels
+    readonly struct Pixels
     {
         public readonly (double R, double G, double B, double Y) Rgb;
         public readonly (double L, double a, double b) Lab;

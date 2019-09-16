@@ -2,22 +2,24 @@
 
 namespace VideoPixelReader.Core
 {
-    // Rect of Interest
-    public struct RectRatio
+    /// <summary>
+    /// Rect of Interest
+    /// </summary>
+    public readonly struct RectRatio
     {
-        public readonly double X;
-        public readonly double Y;
-        public readonly double Width;
-        public readonly double Height;
+        public double X { get; }
+        public double Y { get; }
+        public double Width { get; }
+        public double Height { get; }
 
-        public RectRatio(double _x, double _y, double _w, double _h)
+        public RectRatio(double x, double y, double w, double h)
         {
             double clip(double v) => Math.Max(0.0, Math.Min(v, 1.0));
 
-            var stx = clip(_x);
-            var sty = clip(_y);
-            var edx = clip(stx + _w);
-            var edy = clip(sty + _h);
+            var stx = clip(x);
+            var sty = clip(y);
+            var edx = clip(stx + w);
+            var edy = clip(sty + h);
 
             X = stx;
             Y = sty;
@@ -25,7 +27,8 @@ namespace VideoPixelReader.Core
             Height = edy - sty;
         }
 
-        public override string ToString() => $"X={X:f2}, Y={Y:f2}, Width={Width:f2}, Height={Height:f2}";
+        public override string ToString() =>
+            $"{nameof(X)}={X:f2}, {nameof(Y)}={Y:f2}, {nameof(Width)}={Width:f2}, {nameof(Height)}={Height:f2}";
     }
 
 }

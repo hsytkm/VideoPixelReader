@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using VideoPixelReader.Core;
 
@@ -10,7 +7,7 @@ namespace VideoPixelReaderFw
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
 #if DEBUG
             if ((args?.Length ?? 0) == 0)
@@ -43,7 +40,7 @@ namespace VideoPixelReaderFw
                 if (File.Exists(path))
                 {
                     var reader = new PixelReader(path, new RectRatio(x, y, width, height));
-                    reader.Start();
+                    await reader.Start();
                 }
 
                 Console.WriteLine(Environment.NewLine + "End!");
